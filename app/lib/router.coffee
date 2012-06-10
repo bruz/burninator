@@ -29,10 +29,9 @@ module.exports = class Router extends Backbone.Router
     $('body').append view.render().el
 
   project: (id) ->
-    query = new Parse.Query(Project)
-    query.get id,
-      success: (project) ->
-        view = new ProjectDetailView({model: project})
-        $('#project').html view.render().el
-      error: (object, error) ->
-        console.log error
+    Project.load(id).done (project) ->
+      view = new ProjectDetailView
+        model: project
+        el: $('#project')
+    .fail ->
+      console.log "Failed to retrieve project"
