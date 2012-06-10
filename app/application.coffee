@@ -2,18 +2,15 @@
 Application =
   initialize: ->
     ProjectsView = require 'views/projects_view'
+    Projects = require 'collections/projects'
     Router = require 'lib/router'
 
-    @projectsView = new ProjectsView()
-    @pageSetup()
+    @projects = new Projects()
+    @projectsView = new ProjectsView({projects: @projects})
 
     # Instantiate the router
     @router = new Router()
     # Freeze the object
     Object.freeze? this
-
-  # jQuery setup for elements in index.html
-  pageSetup: ->
-    $('.date').datepicker()
 
 module.exports = Application

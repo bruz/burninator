@@ -1,15 +1,15 @@
 View = require './view'
-Projects = require 'collections/projects'
 ProjectView = require './project_view'
 template = require './templates/projects'
 
 module.exports = class ProjectsView extends View
   template: template
 
-  initialize: ->
-    @projects = new Projects()
+  initialize: (options) ->
+    @projects = options.projects
 
     @projects.on 'reset', @addAll, @
+    @projects.on 'add', @addOne, @
 
     @projects.fetch()
 

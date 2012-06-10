@@ -1,12 +1,10 @@
 View = require './view'
-template = require './templates/project'
+template = require './templates/project_detail'
 
 module.exports = class ProjectView extends View
   template: template
-  tagName: 'li'
 
   getRenderData: ->
     {
       name: @model.get('name') 
-      id: @model.id
     }
