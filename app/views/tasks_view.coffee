@@ -7,12 +7,16 @@ module.exports = class TasksView extends View
 
   initialize: (options) ->
     @tasks = options.tasks
+    @project = options.project
 
     @tasks.on 'reset', @addAll, @
     @tasks.on 'add', @prependOne, @
 
     @render()
     @addAll()
+
+  getRenderData: ->
+    {projectId: @project.id}
 
   addAll: ->
     @tasks.each(@appendOne)

@@ -1,5 +1,6 @@
 Model = require './model'
 Tasks = require 'collections/tasks'
+Task = require 'models/task'
 
 module.exports = class Project extends Model
   className: 'Project'
@@ -9,10 +10,13 @@ module.exports = class Project extends Model
 
     task = new @()
 
-    query = new Parse.Query(Project)
-    query.get id,
+    projectQuery = new Parse.Query(Project)
+    projectQuery.get id,
       success: (project) ->
-        project.relation('tasks').query().find
+        tasksQuery = new Parse.Query(Task)
+        tasksQuery.equalTo('parent', project)
+        #project.relation('tasks').query().find
+        tasksQuery.find
           success: (data) ->
             project.tasks.reset(data)
             dfd.resolve(project)
@@ -29,3 +33,11 @@ module.exports = class Project extends Model
   fetchTasks: ->
 
     model = this
+
+  # COMPUTED ATTRIBUTES
+
+  formStartDate: ->
+    new Date(@get('startDate')).toString('M/d/yyyy')
+
+  formEndDate: ->
+    new Date(@get('endDate')).toString('M/d/yyyy')

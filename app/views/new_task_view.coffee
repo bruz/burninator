@@ -1,14 +1,15 @@
 View = require './view'
+Task = require 'models/task'
 Project = require 'models/project'
-template = require './templates/new_project'
+template = require './templates/new_task'
 
-module.exports = class NewProjectView extends View
+module.exports = class NewTaskView extends View
   template: template
 
   initialize: (options) ->
     @callback = options.complete
-    @projects = options.projects
-    @project = new Project()
+    @projectId = options.projectId
+    @task = new Task()
 
   afterRender: ->
     today = Date.today().toString('M/d/yyyy')
@@ -21,7 +22,7 @@ module.exports = class NewProjectView extends View
       # datepicker also bubbles it's hide event to here
       return unless event.target == event.currentTarget
 
-      view.callback(view.project.get('id'))
+      view.callback()
       $(view.el).remove()
 
   events:
@@ -34,16 +35,23 @@ module.exports = class NewProjectView extends View
 
     view = this
 
-    @project.save {
-      name: view.$('.name').val()
-      startDate: view.$('.start-date input').val()
-      endDate: @$('.end-date input').val()
-    }
-    , {
-      success: (project) ->
-        view.projects.add(project)
+    name = view.$('.name').val()
+    date = view.$('.date-created input').val()
+    hours = @$('.hours input').val()
+
+    project = new Project()
+    project.id = @projectId
+    @task.set('parent', project)
+
+    @task.save {
+      parent: project
+      name: name
+      date: date
+      hours: [{date: date, change: hours}]
+    }, {
+      success: (task) ->
         view.$('.modal').modal('hide')
 
-      error: (project, error) ->
+      error: (task, error) ->
         console.log "FAIL: #{error}"
     }

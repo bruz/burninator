@@ -1,17 +1,20 @@
 application = require 'application'
-NewProjectsView = require 'views/new_project_view'
+NewProjectView = require 'views/new_project_view'
 ProjectDetailView = require 'views/project_detail_view'
+NewTaskView = require 'views/new_task_view'
 Project = require 'models/project'
 
 module.exports = class Router extends Backbone.Router
   routes:
-    ''               : 'home'
-    'signup'         : 'signup'
-    'new'            : 'newProject'
-    'project/:id'    : 'project'
+    ''                       : 'home'
+    'signup'                 : 'signup'
+    'projects/new'           : 'newProject'
+    'projects/:id'           : 'project'
+    'projects/:id/tasks/new' : 'newTask'
 
   home: ->
-    $('#projects').html application.projectsView.render().el
+    $('#project').html('')
+    @_loadSidebar()
 
   signup: ->
     router = this
@@ -20,18 +23,38 @@ module.exports = class Router extends Backbone.Router
       router.navigate('')
 
   newProject: ->
+    @_loadSidebar()
+
     router = this
-    view = new NewProjectsView
+    view = new NewProjectView
       projects: application.projects
       complete: (projectId) ->
-        router.navigate('')
+        router.navigate("projects/#{projectId}")
 
     $('body').append view.render().el
 
   project: (id) ->
+    @_loadSidebar(id)
+
     Project.load(id).done (project) ->
       view = new ProjectDetailView
         model: project
         el: $('#project')
+        tab: 'tasks'
     .fail ->
       console.log "Failed to retrieve project"
+
+  newTask: (id) ->
+    @_loadSidebar(id)
+
+    router = this
+    view = new NewTaskView
+      projectId: id
+      complete: ->
+        router.navigate("projects/#{id}")
+
+    $('body').append view.render().el
+
+  _loadSidebar: (currentId) ->
+    application.projectsView.currentId = currentId
+    $('#projects').html application.projectsView.render().el
