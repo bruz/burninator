@@ -20,7 +20,7 @@ module.exports = class Router extends Backbone.Router
     router = this
 
     $('#signup').modal().on 'hide', ->
-      router.navigate('')
+      router.navigate('', {trigger: true})
 
   newProject: ->
     @_loadSidebar()
@@ -29,7 +29,7 @@ module.exports = class Router extends Backbone.Router
     view = new NewProjectView
       projects: application.projects
       complete: (projectId) ->
-        router.navigate("projects/#{projectId}")
+        router.navigate("projects/#{projectId}", {trigger: true})
 
     $('body').append view.render().el
 
@@ -51,7 +51,7 @@ module.exports = class Router extends Backbone.Router
     view = new NewTaskView
       projectId: id
       complete: ->
-        router.navigate("projects/#{id}")
+        router.navigate("projects/#{id}", {trigger: true})
 
     $('body').append view.render().el
 

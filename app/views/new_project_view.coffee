@@ -21,7 +21,7 @@ module.exports = class NewProjectView extends View
       # datepicker also bubbles it's hide event to here
       return unless event.target == event.currentTarget
 
-      view.callback(view.project.get('id'))
+      view.callback(view.project.id)
       $(view.el).remove()
 
   events:
