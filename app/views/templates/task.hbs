@@ -1,1 +1,14 @@
-<li class="task">A task</li>
+<td>
+  <div class="name">{{name}}</div>
+  <div class="slider-container">
+    <div class="completed">Hours Completed: <span class="completed-hours">{{completedHours}}</span></div>
+    <div class="limits left">0</div>
+    <div class="slider"></div>
+    <div class="limits right">{{totalHours}}</div>
+  </div>
+  <div class="actions">
+    <a href="#" class="save btn btn-small disabled">Save</a>
+    <a href="#" class="edit btn btn-small">Edit</a>
+    <a href="#" class="delete btn btn-danger btn-small">Delete</a>
+  </div>
+</td>

@@ -37,7 +37,7 @@ module.exports = class NewTaskView extends View
 
     name = view.$('.name').val()
     date = view.$('.date-created input').val()
-    hours = @$('.hours input').val()
+    hours = @$('.hours').val()
 
     project = new Project()
     project.id = @projectId
@@ -47,7 +47,8 @@ module.exports = class NewTaskView extends View
       parent: project
       name: name
       date: date
-      hours: [{date: date, change: hours}]
+      totalHours: hours
+      hours: []
     }, {
       success: (task) ->
         view.$('.modal').modal('hide')
