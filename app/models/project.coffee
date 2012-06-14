@@ -8,8 +8,6 @@ module.exports = class Project extends Model
   @load: (id) ->
     dfd = $.Deferred()
 
-    task = new @()
-
     projectQuery = new Parse.Query(Project)
     projectQuery.get id,
       success: (project) ->
@@ -36,8 +34,62 @@ module.exports = class Project extends Model
 
   # COMPUTED ATTRIBUTES
 
+  startDate: ->
+    new Date(@get('startDate'))
+
+  endDate: ->
+    new Date(@get('endDate'))
+
   formStartDate: ->
-    new Date(@get('startDate')).toString('M/d/yyyy')
+    @startDate.toString('M/d/yyyy')
 
   formEndDate: ->
-    new Date(@get('endDate')).toString('M/d/yyyy')
+    @endDate.toString('M/d/yyyy')
+
+  totalHours: ->
+    @tasks.reduce (memo, t) ->
+      hours = parseInt(t.get('totalHours'))
+
+      if isNaN(hours)
+        memo
+      else
+        memo += hours 
+    , 0
+
+  remainingHoursOn: (date) ->
+    @tasks.reduce (memo, t) ->
+      memo += t.remainingHoursOn(date)
+    , 0
+
+  estimateData: ->
+    [
+      {date: @startDate(), hours: @totalHours()},
+      {date: @endDate(), hours: 0}
+    ]
+
+  graphData: ->
+    days = []
+
+    today = Date.today()
+    endDate = @endDate()
+    date = @startDate()
+    estimatedHours = @totalHours()
+
+    numberOfDays = (endDate - date) / 86400000
+    estimatedDelta = estimatedHours / numberOfDays 
+
+    while date <= endDate
+      if date > today
+        actualHours = null
+      else
+        actualHours = @remainingHoursOn(date)
+
+      days.push
+        date: date.getTime()
+        estimatedHours: estimatedHours
+        actualHours: actualHours
+
+      date.add(1).day()
+      estimatedHours -= estimatedDelta
+
+    days

@@ -38,7 +38,7 @@ module.exports = class NewTaskView extends View
 
     name = view.$('.name').val()
     date = view.$('.date-created input').val()
-    hours = @$('.hours').val()
+    hours = parseInt @$('.hours').val()
 
     project = new Project()
     project.id = @projectId

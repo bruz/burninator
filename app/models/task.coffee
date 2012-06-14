@@ -20,3 +20,15 @@ module.exports = class Task extends Model
     hours.push {date: today, hours: change}
 
     @trigger('change:hours')
+
+  remainingHoursOn: (date) ->
+    hours = @get('hours')
+
+    @get('totalHours') + _.reduce hours, (memo, h) ->
+      hoursDate = new Date(h.date)
+
+      if hoursDate <= date
+        memo += h.hours
+      else
+        memo
+    , 0

@@ -2,7 +2,7 @@ View = require './view'
 TasksView = require 'views/tasks_view'
 template = require './templates/project_detail'
 
-module.exports = class ProjectView extends View
+module.exports = class ProjectDetailView extends View
   template: template
 
   initialize: (options) ->
@@ -25,6 +25,22 @@ module.exports = class ProjectView extends View
 
   afterRender: ->
     @$('.date').datepicker()
+    @drawGraph()
+
+  drawGraph: ->
+    data = @model.graphData()
+
+    Morris.Line
+      element: 'burndown'
+      data: data
+      xkey: 'date'
+      ykeys: ['estimatedHours', 'actualHours']
+      labels: ['Esimated', 'Actual']
+      lineColors: ['#167f39', '#044c29']
+      lineWidth: 2
+      smooth: false
+      dateFormat: (date) ->
+        new Date(date).toString("M/d/yyyy")
 
   events:
     "click .reset" : "resetForm"
