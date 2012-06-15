@@ -46,11 +46,12 @@ module.exports = class Project extends Model
   formEndDate: ->
     @endDate.toString('M/d/yyyy')
 
-  totalHours: ->
+  totalHoursOn: (date) ->
     @tasks.reduce (memo, t) ->
-      hours = parseInt(t.get('totalHours'))
+      hours = t.get('totalHours')
+      taskDate = new Date(t.get('date'))
 
-      if isNaN(hours)
+      if isNaN(hours) || taskDate > date
         memo
       else
         memo += hours 
@@ -58,14 +59,13 @@ module.exports = class Project extends Model
 
   remainingHoursOn: (date) ->
     @tasks.reduce (memo, t) ->
-      memo += t.remainingHoursOn(date)
-    , 0
+      taskDate = new Date(t.get('date'))
 
-  estimateData: ->
-    [
-      {date: @startDate(), hours: @totalHours()},
-      {date: @endDate(), hours: 0}
-    ]
+      if taskDate <= date
+        memo += t.remainingHoursOn(date)
+      else
+        memo
+    , 0
 
   graphData: ->
     days = []
@@ -73,7 +73,7 @@ module.exports = class Project extends Model
     today = Date.today()
     endDate = @endDate()
     date = @startDate()
-    estimatedHours = @totalHours()
+    estimatedHours = @totalHoursOn(date)
 
     numberOfDays = (endDate - date) / 86400000
     estimatedDelta = estimatedHours / numberOfDays 

@@ -39,8 +39,11 @@ module.exports = class ProjectDetailView extends View
       lineColors: ['#167f39', '#044c29']
       lineWidth: 2
       smooth: false
-      dateFormat: (date) ->
-        new Date(date).toString("M/d/yyyy")
+      dateFormat: @dateFormat
+      xLabelFormat: @dateFormat
+
+  dateFormat: (date) ->
+    new Date(date).toString("M/d/yyyy")
 
   events:
     "click .reset" : "resetForm"
