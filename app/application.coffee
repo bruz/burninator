@@ -18,6 +18,6 @@ Application =
     user = Parse.User.current()
     
     if user
-      $('#username').html(user.get('username'))
+      $('#username').html('signed in as ' + user.get('username'))
 
 module.exports = Application
