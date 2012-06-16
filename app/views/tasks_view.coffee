@@ -13,10 +13,12 @@ module.exports = class TasksView extends View
     @tasks.on 'add', @prependOne, @
 
     @render()
-    @addAll()
 
   getRenderData: ->
     {projectId: @project.id}
+
+  afterRender: ->
+    @addAll()
 
   addAll: ->
     @tasks.each(@appendOne)

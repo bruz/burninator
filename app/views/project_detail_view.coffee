@@ -15,6 +15,12 @@ module.exports = class ProjectDetailView extends View
       tasks: @model.tasks
       project: @model
 
+    view = this
+    
+    # redraw graph when tasks change
+    @model.tasks.on 'all', ->
+      view.drawGraph()
+
   getRenderData: ->
     {
       tab: @tab
@@ -31,6 +37,8 @@ module.exports = class ProjectDetailView extends View
     data = @model.graphData()
 
     if data
+      $('#burndown').html('')
+
       Morris.Line
         element: 'burndown'
         data: data
