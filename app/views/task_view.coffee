@@ -34,7 +34,8 @@ module.exports = class Task extends View
           view.enableSave()
 
   events:
-    "click .save" : "save"
+    "click .save"   : "save"
+    "click .delete" : "deleteTask"
 
   enableSave: ->
     @$('.save').removeClass('disabled')
@@ -54,3 +55,11 @@ module.exports = class Task extends View
       success: ->
         view.disableSave()
         view.savedHours = current
+
+  deleteTask: ->
+    event.preventDefault()
+
+    view = this
+    @model.destroy
+      success: ->
+        $(view.el).remove()
