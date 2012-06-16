@@ -2,31 +2,57 @@ application = require 'application'
 NewProjectView = require 'views/new_project_view'
 ProjectDetailView = require 'views/project_detail_view'
 NewTaskView = require 'views/new_task_view'
-SignupView = require 'views/signup'
+SignupView = require 'views/signup_view'
+SigninView = require 'views/signin_view'
 Project = require 'models/project'
 
 module.exports = class Router extends Backbone.Router
   routes:
-    ''                       : 'home'
+    ''                       : 'signin'
+    'signin'                 : 'signin'
     'signup'                 : 'signup'
+    'projects'               : 'projects'
     'projects/new'           : 'newProject'
     'projects/:id'           : 'project'
     'projects/:id/tasks/new' : 'newTask'
 
   home: ->
     $('#project').html('')
+    $('#projects').html('')
+
+  projects: ->
+    $('#project').html('')
     @_loadSidebar()
 
+  signin: ->
+    # hide any other modals
+    $('.modal').modal('hide')
+
+    router = this
+
+    view = new SigninView
+      complete: (user) ->
+        if user
+          application.setUsername()
+          router.navigate('projects', {trigger: true})
+        else
+          router.navigate('', {trigger: true})
+          
+    $('body').append view.render().el
+
   signup: ->
+    # hide any other modals
+    $('.modal').modal('hide')
+
     router = this
 
     view = new SignupView
       complete: (user) ->
         if user
-          application.user = user
-          router.navigate('', {trigger: true})
+          application.setUsername()
+          router.navigate('projects', {trigger: true})
         else
-          router.navigate('signup', {trigger: true})
+          router.navigate('', {trigger: true})
           
     $('body').append view.render().el
 

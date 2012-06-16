@@ -10,6 +10,7 @@ module.exports = class NewTaskView extends View
     @callback = options.complete
     @projectId = options.projectId
     @task = new Task()
+    @task.setACL(new Parse.ACL(Parse.User.current()))
 
   afterRender: ->
     today = Date.today().toString('M/d/yyyy')

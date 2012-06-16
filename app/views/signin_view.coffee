@@ -1,7 +1,7 @@
 View = require './view'
-template = require './templates/signup'
+template = require './templates/signin'
 
-module.exports = class SignupView extends View
+module.exports = class SigninView extends View
   template: template
 
   initialize: (options) ->
@@ -14,19 +14,16 @@ module.exports = class SignupView extends View
       view.callback()
 
   events:
-    "click .signup" : "signup"
-    "submit form"   : "signup"
+    "click .signin" : "signin"
 
-  signup: (event) ->
+  signin: (event) ->
     event.preventDefault()
 
-    user = new Parse.User
-      username: @$('.username').val()
-      email: @$('.email').val()
-      password: @$('.password').val()
+    username = @$('.username').val()
+    password = @$('.password').val()
 
     view = this
-    user.signUp null,
+    Parse.User.logIn username, password,
       success: (user) ->
         view.$('.modal').modal('hide')
         $(view.el).remove()

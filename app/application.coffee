@@ -7,10 +7,17 @@ Application =
 
     @projects = new Projects()
     @projectsView = new ProjectsView({projects: @projects})
+    @setUsername()
 
     # Instantiate the router
     @router = new Router()
     # Freeze the object
     Object.freeze? this
+
+  setUsername: ->
+    user = Parse.User.current()
+    
+    if user
+      $('#username').html(user.get('username'))
 
 module.exports = Application

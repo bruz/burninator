@@ -9,6 +9,7 @@ module.exports = class NewProjectView extends View
     @callback = options.complete
     @projects = options.projects
     @project = new Project()
+    @project.setACL(new Parse.ACL(Parse.User.current()))
 
   afterRender: ->
     today = Date.today().toString('M/d/yyyy')
