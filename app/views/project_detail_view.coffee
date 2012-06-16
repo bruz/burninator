@@ -30,17 +30,18 @@ module.exports = class ProjectDetailView extends View
   drawGraph: ->
     data = @model.graphData()
 
-    Morris.Line
-      element: 'burndown'
-      data: data
-      xkey: 'date'
-      ykeys: ['estimatedHours', 'actualHours']
-      labels: ['Esimated', 'Actual']
-      lineColors: ['#167f39', '#044c29']
-      lineWidth: 2
-      smooth: false
-      dateFormat: @dateFormat
-      xLabelFormat: @dateFormat
+    if data
+      Morris.Line
+        element: 'burndown'
+        data: data
+        xkey: 'date'
+        ykeys: ['estimatedHours', 'actualHours']
+        labels: ['Esimated', 'Actual']
+        lineColors: ['#167f39', '#044c29']
+        lineWidth: 2
+        smooth: false
+        dateFormat: @dateFormat
+        xLabelFormat: @dateFormat
 
   dateFormat: (date) ->
     new Date(date).toString("M/d/yyyy")

@@ -70,6 +70,10 @@ module.exports = class Project extends Model
   graphData: ->
     days = []
 
+    # morris.js can't handle a graph with 0 for every
+    # data point
+    hasData = false
+
     today = Date.today()
     endDate = @endDate()
     date = @startDate()
@@ -89,7 +93,13 @@ module.exports = class Project extends Model
         estimatedHours: estimatedHours
         actualHours: actualHours
 
+      if estimatedHours > 0 || actualHours > 0
+        hasData = true
+
       date.add(1).day()
       estimatedHours -= estimatedDelta
 
-    days
+    if hasData
+      return days
+    else
+      return null
