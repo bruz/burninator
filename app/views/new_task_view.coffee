@@ -14,8 +14,8 @@ module.exports = class NewTaskView extends View
 
   afterRender: ->
     today = Date.today().toString('M/d/yyyy')
-    @$('.data').attr('data-date', today)
-    @$('.data input').val(today)
+    @$('.date').attr('data-date', today)
+    @$('.date input').val(today)
     @$('.date').datepicker()
 
     view = this
