@@ -2,7 +2,6 @@ View = require './view'
 Task = require 'models/task'
 Project = require 'models/project'
 template = require './templates/new_task'
-router = require 'lib/router'
 
 module.exports = class NewTaskView extends View
   template: template

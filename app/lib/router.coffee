@@ -2,6 +2,7 @@ application = require 'application'
 NewProjectView = require 'views/new_project_view'
 ProjectDetailView = require 'views/project_detail_view'
 NewTaskView = require 'views/new_task_view'
+SignupView = require 'views/signup'
 Project = require 'models/project'
 
 module.exports = class Router extends Backbone.Router
@@ -19,8 +20,15 @@ module.exports = class Router extends Backbone.Router
   signup: ->
     router = this
 
-    $('#signup').modal().on 'hide', ->
-      router.navigate('', {trigger: true})
+    view = new SignupView
+      complete: (user) ->
+        if user
+          application.user = user
+          router.navigate('', {trigger: true})
+        else
+          router.navigate('signup', {trigger: true})
+          
+    $('body').append view.render().el
 
   newProject: ->
     @_loadSidebar()
