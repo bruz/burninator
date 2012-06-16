@@ -11,26 +11,25 @@ module.exports = class Router extends Backbone.Router
     ''                       : 'signin'
     'signin'                 : 'signin'
     'signup'                 : 'signup'
+    'signout'                : 'signout'
     'projects'               : 'projects'
     'projects/new'           : 'newProject'
     'projects/:id'           : 'project'
     'projects/:id/tasks/new' : 'newTask'
 
   home: ->
-    $('#project').html('')
-    $('#projects').html('')
+    @_clearPage()
 
   projects: ->
-    $('#project').html('')
+    @_clearPage()
     @_loadSidebar()
 
   signin: ->
+    @_clearPage()
+
     if @_signedIn()
       @navigate('projects', {trigger: true})
     else
-      # hide any other modals
-      $('.modal').modal('hide')
-
       router = this
 
       view = new SigninView
@@ -44,12 +43,11 @@ module.exports = class Router extends Backbone.Router
       $('body').append view.render().el
 
   signup: ->
+    @_clearPage()
+
     if @_signedIn()
       @navigate('projects', {trigger: true})
     else
-      # hide any other modals
-      $('.modal').modal('hide')
-
       router = this
 
       view = new SignupView
@@ -61,6 +59,10 @@ module.exports = class Router extends Backbone.Router
             router.navigate('', {trigger: true})
             
       $('body').append view.render().el
+
+  signout: ->
+    Parse.User.logOut()
+    @navigate('signin', {trigger: true})
 
   newProject: ->
     @_loadSidebar()
@@ -96,8 +98,15 @@ module.exports = class Router extends Backbone.Router
     $('body').append view.render().el
 
   _loadSidebar: (currentId) ->
-    application.projectsView.currentId = currentId
-    $('#projects').html application.projectsView.render().el
+    application.projectsView.update
+      currentId: currentId
+
+  _clearPage: ->
+    # hide any other modals
+    $('.modal').modal('hide')
+
+    $('#project').html('')
+    $('#projects').html('')
 
   _signedIn: ->
     Parse.User.current()
