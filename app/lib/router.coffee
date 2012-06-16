@@ -25,36 +25,42 @@ module.exports = class Router extends Backbone.Router
     @_loadSidebar()
 
   signin: ->
-    # hide any other modals
-    $('.modal').modal('hide')
+    if @_signedIn()
+      @navigate('projects', {trigger: true})
+    else
+      # hide any other modals
+      $('.modal').modal('hide')
 
-    router = this
+      router = this
 
-    view = new SigninView
-      complete: (user) ->
-        if user
-          application.setUsername()
-          router.navigate('projects', {trigger: true})
-        else
-          router.navigate('', {trigger: true})
-          
-    $('body').append view.render().el
+      view = new SigninView
+        complete: (user) ->
+          if user
+            application.setUsername()
+            router.navigate('projects', {trigger: true})
+          else
+            router.navigate('', {trigger: true})
+            
+      $('body').append view.render().el
 
   signup: ->
-    # hide any other modals
-    $('.modal').modal('hide')
+    if @_signedIn()
+      @navigate('projects', {trigger: true})
+    else
+      # hide any other modals
+      $('.modal').modal('hide')
 
-    router = this
+      router = this
 
-    view = new SignupView
-      complete: (user) ->
-        if user
-          application.setUsername()
-          router.navigate('projects', {trigger: true})
-        else
-          router.navigate('', {trigger: true})
-          
-    $('body').append view.render().el
+      view = new SignupView
+        complete: (user) ->
+          if user
+            application.setUsername()
+            router.navigate('projects', {trigger: true})
+          else
+            router.navigate('', {trigger: true})
+            
+      $('body').append view.render().el
 
   newProject: ->
     @_loadSidebar()
@@ -92,3 +98,6 @@ module.exports = class Router extends Backbone.Router
   _loadSidebar: (currentId) ->
     application.projectsView.currentId = currentId
     $('#projects').html application.projectsView.render().el
+
+  _signedIn: ->
+    Parse.User.current()
