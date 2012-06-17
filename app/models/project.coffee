@@ -41,10 +41,10 @@ module.exports = class Project extends Model
     new Date(@get('endDate'))
 
   formStartDate: ->
-    @startDate.toString('M/d/yyyy')
+    @startDate().toString('M/d/yyyy')
 
   formEndDate: ->
-    @endDate.toString('M/d/yyyy')
+    @endDate().toString('M/d/yyyy')
 
   totalHoursOn: (date) ->
     @tasks.reduce (memo, t) ->

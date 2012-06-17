@@ -21,6 +21,10 @@ module.exports = class ProjectDetailView extends View
     @model.tasks.on 'all', ->
       view.drawGraph()
 
+    # redraw graph on browser resize
+    $(window).resize ->
+      view.drawGraph()
+
   getRenderData: ->
     {
       tab: @tab
