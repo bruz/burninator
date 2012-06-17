@@ -6,21 +6,24 @@
   <div class="modal-body">
     <form class="form-horizontal">
       <div class="control-group">
-        <label class="control-label">Total Hours</label>
+        <label class="control-label">Initial Hours</label>
         <div class="controls">
-          {{totalHours}}
+          <span class="input-xlarge uneditable-input">{{totalHours}}</span>
         </div>
       </div>
 
       <div class="control-group">
-        <label class="control-label">Completed Hours</label>
+        <label class="control-label">Remaining Hours</label>
         <div class="controls">
-          {{completedHours}}
+          <span class="input-xlarge uneditable-input">{{remainingHours}}</span>
         </div>
       </div>
     </form>
 
-    <ul class="change-list"></ul>
+    <table class="table table-bordered table-striped">
+      <tbody class="change-list">
+      </tbody>
+    </table>
   </div>
   <div class="modal-footer">
     <a href="#" class="exit btn btn-primary">Close</a>

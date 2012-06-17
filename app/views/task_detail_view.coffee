@@ -14,10 +14,12 @@ module.exports = class TaskDetailView extends View
     $('body').append @render().el
 
   afterRender: ->
-    @setupDatePickers()
-
     view = this
-    _.each @model.get('hours'), (change) ->
+
+    hours = _.sortBy @model.get('hours'), (change) ->
+      change.date
+      
+    _.each hours, (change) ->
       view.addHourChange(change)
 
     view = this
@@ -31,12 +33,12 @@ module.exports = class TaskDetailView extends View
     {
       name: @model.get('name') 
       totalHours: @model.totalHours()
-      completedHours: @model.completedHours()
+      remainingHours: @model.remainingHours()
     }
 
   addHourChange: (change) ->
-    @$('.change-list').append("<li>#{change.hours}</li>")
-    #view = 
+    view = new HourChangeView({change: change})
+    @$('.change-list').append(view.render().el)
 
   events:
     "click .exit" : "exit"

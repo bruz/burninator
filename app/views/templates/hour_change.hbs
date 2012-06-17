@@ -1,0 +1,21 @@
+<td>
+  <div class="date">{{theDate}}</div>
+
+  <div class="arrow">
+    {{#if isIncrease}}
+      <i class="icon-arrow-up"></i>
+    {{else}}
+      <i class="icon-arrow-down"></i>
+    {{/if}}
+  </div>
+
+  <div class="hours">
+    {{hours}} hour
+
+    {{#if isIncrease}}
+      increase 
+    {{else}}
+      decrease
+    {{/if}}
+  </div>
+</td>
