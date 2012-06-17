@@ -28,6 +28,7 @@ module.exports = class TaskView extends View
     "click .subtract" : "subtract"
     "click .details"  : "details"
     "click .delete"   : "deleteTask"
+    "click .complete" : "complete"
 
   add: (event) ->
     event.preventDefault()
@@ -54,3 +55,9 @@ module.exports = class TaskView extends View
     @model.destroy
       success: ->
         $(view.el).remove()
+
+  complete: (event) ->
+    event.preventDefault()
+
+    @model.complete()
+    @model.save()

@@ -61,3 +61,6 @@ module.exports = class Task extends Model
       else
         memo
     , 0
+
+  complete: ->
+    @changeHours( -@remainingHours() )
