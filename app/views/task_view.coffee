@@ -1,62 +1,53 @@
 View = require './view'
+TaskDetailView = require './task_detail_view'
+TaskAddHoursView = require './task_add_hours_view'
+TaskSubtractHoursView = require './task_subtract_hours_view'
 template = require './templates/task'
 
-module.exports = class Task extends View
+module.exports = class TaskView extends View
   template: template
   tagName: 'tr'
   className: 'task'
 
   initialize: ->
-    @model.on 'change:hours', @enableSave, @
-
-    @savedHours = @model.completedHours()
+    @model.on 'all', @render, @
 
   getRenderData: ->
     {
       name: @model.get('name')
-      totalHours: @model.get('totalHours')
+      totalHours: @model.totalHours()
       completedHours: @model.completedHours()
+      remainingHours: @model.remainingHours()
     }
 
   afterRender: ->
     view = this
-    start = @model.completedHours()
-
-    @$('.slider').slider
-      max: @model.get('totalHours')
-      value: start
-      slide: (event, ui) ->
-        view.$('.completed-hours').text(ui.value)
-      change: (event, ui) ->
-        if start - ui.value == 0
-          view.disableSave()
-        else
-          view.enableSave()
 
   events:
-    "click .save"   : "save"
-    "click .delete" : "deleteTask"
+    "click .add"      : "add"
+    "click .subtract" : "subtract"
+    "click .details"  : "details"
+    "click .delete"   : "deleteTask"
 
-  enableSave: ->
-    @$('.save').removeClass('disabled')
-
-  disableSave: ->
-    @$('.save').addClass('disabled')
-
-  save: (event) ->
+  add: (event) ->
     event.preventDefault()
 
-    current = @$('.completed-hours').text()
-    change = @savedHours - current 
-    @model.changeHours(change)
+    new TaskAddHoursView
+      model: @model
 
-    view = this
-    @model.save
-      success: ->
-        view.disableSave()
-        view.savedHours = current
+  subtract: (event) ->
+    event.preventDefault()
 
-  deleteTask: ->
+    new TaskSubtractHoursView
+      model: @model
+
+  details: (event) ->
+    event.preventDefault()
+    
+    new TaskDetailView
+      model: @model
+
+  deleteTask: (event) ->
     event.preventDefault()
 
     view = this

@@ -48,7 +48,7 @@ module.exports = class Project extends Model
 
   totalHoursOn: (date) ->
     @tasks.reduce (memo, t) ->
-      hours = t.get('totalHours')
+      hours = t.totalHours()
       taskDate = new Date(t.get('date'))
 
       if isNaN(hours) || taskDate > date

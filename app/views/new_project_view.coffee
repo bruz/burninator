@@ -12,10 +12,7 @@ module.exports = class NewProjectView extends View
     @project.setACL(new Parse.ACL(Parse.User.current()))
 
   afterRender: ->
-    today = Date.today().toString('M/d/yyyy')
-    @$('.date').attr('data-date', today)
-    @$('.date input').val(today)
-    @$('.date').datepicker()
+    @setupDatePickers()
 
     view = this
     @$('.modal').modal().on 'hide', (event) ->

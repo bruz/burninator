@@ -13,10 +13,7 @@ module.exports = class NewTaskView extends View
     @task.setACL(new Parse.ACL(Parse.User.current()))
 
   afterRender: ->
-    today = Date.today().toString('M/d/yyyy')
-    @$('.date').attr('data-date', today)
-    @$('.date input').val(today)
-    @$('.date').datepicker()
+    @setupDatePickers()
 
     view = this
     @$('.modal').modal().on 'hide', (event) ->
@@ -48,7 +45,7 @@ module.exports = class NewTaskView extends View
       parent: project
       name: name
       date: date
-      totalHours: hours
+      initialHours: hours
       hours: []
     }, {
       success: (task) ->

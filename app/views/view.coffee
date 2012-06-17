@@ -16,3 +16,9 @@ module.exports = class View extends Backbone.View
 
   afterRender: ->
     return
+
+  setupDatePickers: ->
+    today = Date.today().toString('M/d/yyyy')
+    @$('.date').attr('data-date', today)
+    @$('.date input').val(today)
+    @$('.date').datepicker()

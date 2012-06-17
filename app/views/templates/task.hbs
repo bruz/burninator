@@ -1,14 +1,22 @@
 <td>
   <div class="name">{{name}}</div>
+  <div class="remaining">
+    <div class="hours">{{remainingHours}}</div>HR remaining
+  </div>
+  <div class="change">
+    <a class="subtract btn btn-small" href="#"><i class="icon-minus-sign"></i></a>
+    <a class="add btn btn-small" href="#"><i class="icon-plus-sign"></i></a>
+  </div>
+  <!--
   <div class="slider-container">
     <div class="completed">Hours Completed: <span class="completed-hours">{{completedHours}}</span></div>
     <div class="limits left">0</div>
     <div class="slider"></div>
     <div class="limits right">{{totalHours}}</div>
   </div>
+  -->
   <div class="actions">
-    <a href="#" class="save btn btn-small disabled">Save</a>
-    <a href="#" class="edit btn btn-small">Edit</a>
+    <a href="#" class="details btn btn-small">Details</a>
     <a href="#" class="delete btn btn-danger btn-small">Delete</a>
   </div>
 </td>

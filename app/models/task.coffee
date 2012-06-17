@@ -13,21 +13,50 @@ module.exports = class Task extends Model
         memo
     , 0
 
-  changeHours: (change) ->
+  changeHours: (change, date) ->
     hours = @get('hours')
-    today = Date.today().toString('M/d/yyyy')
+    date ||= Date.today().toString('M/d/yyyy')
 
-    hours.push {date: today, hours: change}
+    hours.push {date: date, hours: change}
 
     @trigger('change:hours')
+
+  remainingHours: ->
+    hours = @get('hours')
+
+    @get('initialHours') + _.reduce hours, (memo, h) ->
+      memo += h.hours
+    , 0
 
   remainingHoursOn: (date) ->
     hours = @get('hours')
 
-    @get('totalHours') + _.reduce hours, (memo, h) ->
+    @get('initialHours') + _.reduce hours, (memo, h) ->
       hoursDate = new Date(h.date)
 
       if hoursDate <= date
+        memo += h.hours
+      else
+        memo
+    , 0
+
+  totalHours: ->
+    hours = @get('hours')
+
+    @get('initialHours') + _.reduce hours, (memo, h) ->
+      if h > 0
+        memo += h.hours
+      else
+        memo
+    , 0
+
+  totalHoursOn: (date) ->
+    hours = @get('hours')
+
+    @get('initialHours') + _.reduce hours, (memo, h) ->
+      hoursDate = new Date(h.date)
+
+      if h > 0 && hoursDate <= date
         memo += h.hours
       else
         memo
