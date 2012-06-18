@@ -9,6 +9,8 @@ module.exports = class NewProjectView extends View
     @callback = options.complete
     @projects = options.projects
     @project = new Project()
+
+    # this is how the project is made private to the user with Parse
     @project.setACL(new Parse.ACL(Parse.User.current()))
 
   afterRender: ->

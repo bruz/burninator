@@ -10,6 +10,8 @@ module.exports = class NewTaskView extends View
     @callback = options.complete
     @projectId = options.projectId
     @task = new Task()
+
+    # this is how the task is made private to the user with Parse
     @task.setACL(new Parse.ACL(Parse.User.current()))
 
   afterRender: ->

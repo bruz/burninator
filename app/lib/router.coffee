@@ -20,10 +20,6 @@ module.exports = class Router extends Backbone.Router
   home: ->
     @_clearPage()
 
-  projects: ->
-    @_clearPage()
-    @_loadSidebar()
-
   signin: ->
     @_clearPage()
 
@@ -64,6 +60,10 @@ module.exports = class Router extends Backbone.Router
     Parse.User.logOut()
     @navigate('signin', {trigger: true})
 
+  projects: ->
+    @_clearPage()
+    @_loadSidebar()
+    
   newProject: ->
     @_loadSidebar()
 

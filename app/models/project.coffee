@@ -5,6 +5,8 @@ Task = require 'models/task'
 module.exports = class Project extends Model
   className: 'Project'
 
+  # Load the project from Parse, along with all child tasks. Wrapping the
+  # callbacks with a jQuery Deferred object to expose that cleaner API.
   @load: (id) ->
     dfd = $.Deferred()
 
@@ -28,10 +30,6 @@ module.exports = class Project extends Model
   initialize: ->
     @tasks = new Tasks()
 
-  fetchTasks: ->
-
-    model = this
-
   # COMPUTED ATTRIBUTES
 
   startDate: ->
@@ -40,12 +38,16 @@ module.exports = class Project extends Model
   endDate: ->
     new Date(@get('endDate'))
 
+  # start date formatted for form field
   formStartDate: ->
     @startDate().toString('M/d/yyyy')
 
+  # end date formatted for form field
   formEndDate: ->
     @endDate().toString('M/d/yyyy')
 
+  # Total hours added to a project as of a particular date, essentially the sum
+  # of total hours on that date for its tasks.
   totalHoursOn: (date) ->
     @tasks.reduce (memo, t) ->
       hours = t.totalHours()
@@ -57,6 +59,7 @@ module.exports = class Project extends Model
         memo += hours 
     , 0
 
+  # Remaining hours to completion on a particular date, just the sum for its tasks
   remainingHoursOn: (date) ->
     @tasks.reduce (memo, t) ->
       taskDate = new Date(t.get('date'))
@@ -67,6 +70,8 @@ module.exports = class Project extends Model
         memo
     , 0
 
+  # Data for the burndown graph. Generates an array of actual vs estimated
+  # hours for each day during the sprint.
   graphData: ->
     days = []
 

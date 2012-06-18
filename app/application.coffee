@@ -7,6 +7,9 @@ Application =
 
     @projects = new Projects()
     @projectsView = new ProjectsView({projects: @projects})
+
+    # Render in the current user's username on initial page load.
+    # This will also be updated during signin/signup/signout
     @setUsername()
 
     # Instantiate the router
